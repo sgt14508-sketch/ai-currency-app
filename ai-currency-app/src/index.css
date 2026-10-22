@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #0a0e1a;
+  overflow-x: hidden;
+}
+
+.gradient-bg {
+  background: linear-gradient(-45deg, #0a0e1a, #111827, #0f172a, #1e1b4b);
+  background-size: 400% 400%;
+  animation: gradientShift 10s ease infinite;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-thumb { background: #22d3ee55; border-radius: 10px; }
