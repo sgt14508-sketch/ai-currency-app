@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Lock, Loader2 } from "lucide-react";
+import { Mail, Lock, Loader2, ArrowRight } from "lucide-react";
 
 export default function LoginPage({ onLogin }) {
   const [email, setEmail] = useState("");
@@ -12,102 +12,151 @@ export default function LoginPage({ onLogin }) {
     if (!email || !password) return;
     
     setIsLoading(true);
-    // Fake loading delay
+    // Fake loading delay for the cinematic feel
     setTimeout(() => {
       setIsLoading(false);
       onLogin();
-    }, 1400);
+    }, 1500);
+  };
+
+  // Animation variants for staggered entrance
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
   };
 
   return (
-    <div className="min-h-screen gradient-bg flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Decorative floating background elements */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+    <div className="min-h-screen bg-[#050914] flex items-center justify-center p-4 relative overflow-hidden selection:bg-cyan-500/30">
+      
+      {/* Ambient Moving Background (Scrolltide vibe) */}
+      <motion.div 
+        animate={{ 
+          scale: [1, 1.1, 1],
+          opacity: [0.3, 0.5, 0.3],
+          rotate: [0, 5, 0]
+        }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[120px] pointer-events-none"
+      />
+      <motion.div 
+        animate={{ 
+          scale: [1, 1.2, 1],
+          opacity: [0.2, 0.4, 0.2],
+          rotate: [0, -5, 0]
+        }}
+        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[120px] pointer-events-none"
+      />
 
+      {/* Main Glass Card */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-md glass p-8 rounded-3xl relative z-10 border border-white/10 shadow-2xl"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="w-full max-w-md relative z-10"
       >
-        <div className="flex flex-col items-center mb-8">
-          {/* Spinning Logo */}
-          <div className="relative w-20 h-20 mb-6">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-0 rounded-full border-2 border-transparent border-t-cyan-400 border-r-purple-500"
-            />
-            <div className="absolute inset-2 bg-slate-900 rounded-full flex items-center justify-center border border-white/5">
-              <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-                C
-              </span>
+        <div className="bg-[#0a1122]/80 backdrop-blur-2xl border border-white/10 p-8 sm:p-10 rounded-[2rem] shadow-[0_0_50px_-12px_rgba(34,211,238,0.2)]">
+          
+          {/* Logo Area */}
+          <motion.div variants={itemVariants} className="flex flex-col items-center mb-10">
+            <div className="relative w-24 h-24 mb-6 flex items-center justify-center">
+              {/* Outer spinning ring */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0 rounded-full border border-cyan-400/30 border-t-cyan-400"
+              />
+              {/* Inner glowing orb */}
+              <div className="absolute inset-2 bg-[#050914] rounded-full flex items-center justify-center border border-white/5 shadow-inner">
+                <span className="text-3xl font-black bg-gradient-to-br from-cyan-400 to-purple-500 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]">
+                  C
+                </span>
+              </div>
             </div>
-          </div>
+            <h2 className="text-3xl font-bold text-white mb-2 tracking-tight">
+              Currency Exchanger Pro
+            </h2>
+            <p className="text-slate-400 text-sm">
+              Sign in to access your AI dashboard
+            </p>
+          </motion.div>
 
-          <h2 className="text-3xl font-bold text-white mb-2 text-center">
-            Currency Exchanger Pro
-          </h2>
-          <p className="text-slate-400 text-center">
-            Sign in to your AI dashboard
-          </p>
-        </div>
+          {/* Form Area */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <motion.div variants={itemVariants} className="relative group">
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 w-5 h-5 group-focus-within:text-cyan-400 transition-colors" />
+              <input
+                type="email"
+                placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full bg-black/40 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/50 transition-all"
+                required
+              />
+            </motion.div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="relative">
-            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-slate-800/50 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/50 transition-all"
-              required
-            />
-          </div>
+            <motion.div variants={itemVariants} className="relative group">
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 w-5 h-5 group-focus-within:text-cyan-400 transition-colors" />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-black/40 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/50 transition-all"
+                required
+              />
+            </motion.div>
 
-          <div className="relative">
-            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-slate-800/50 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/50 transition-all"
-              required
-            />
-          </div>
+            <motion.button
+              variants={itemVariants}
+              type="submit"
+              disabled={isLoading}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 mt-4 shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:shadow-[0_0_30px_rgba(34,211,238,0.5)]"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Authenticating...
+                </>
+              ) : (
+                <>
+                  Sign in
+                  <ArrowRight className="w-5 h-5" />
+                </>
+              )}
+            </motion.button>
+          </form>
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-2 mt-6 shadow-lg shadow-cyan-500/25"
+          {/* Divider */}
+          <motion.div variants={itemVariants} className="mt-8 flex items-center justify-center text-xs text-slate-500 uppercase tracking-widest">
+            <span className="w-full border-t border-white/10"></span>
+            <span className="px-4 shrink-0">Or</span>
+            <span className="w-full border-t border-white/10"></span>
+          </motion.div>
+
+          {/* Google Button */}
+          <motion.button
+            variants={itemVariants}
+            onClick={onLogin}
+            type="button"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full mt-6 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium py-3.5 rounded-xl transition-all flex items-center justify-center gap-2"
           >
-            {isLoading ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                Signing in...
-              </>
-            ) : (
-              "Sign in"
-            )}
-          </button>
-        </form>
+            Continue with Google
+          </motion.button>
 
-        <div className="mt-6 flex items-center justify-center text-sm text-slate-400">
-          <span className="w-full border-t border-white/10"></span>
-          <span className="px-4 shrink-0">or</span>
-          <span className="w-full border-t border-white/10"></span>
         </div>
-
-        <button
-          onClick={onLogin}
-          type="button"
-          className="w-full mt-6 bg-slate-800/50 hover:bg-slate-800 border border-white/10 text-white font-medium py-3 rounded-xl transition-all flex items-center justify-center gap-2"
-        >
-          Continue with Google
-        </button>
       </motion.div>
     </div>
   );
