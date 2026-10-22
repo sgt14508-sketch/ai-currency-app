@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ArrowRightLeft } from "lucide-react";
 import { currencies } from "../data/mockData";
 import useCountUp from "../hooks/useCountUp";
+import { useExchangeRates } from "../hooks/useExchangeRates";
 
 function FlagIcon({ flagCode, className = "w-7 h-7" }) {
   return (
@@ -33,7 +34,7 @@ function CurrencyDropdown({ selected, onSelect, align = "left" }) {
         className="flex items-center gap-2 bg-black/30 border border-cyan-400/30 rounded-xl px-3 py-2.5 hover:border-cyan-400/60 transition"
       >
         <FlagIcon flagCode={selected.flagCode} className="w-6 h-6" />
-        <span className="text-white font-semibold text-sm">{selected.code}</span>
+        <span className="text-white font-semibold text-sm">{selected.code.toUpperCase()}</span>
         <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.2 }}>
           <ChevronDown className="w-4 h-4 text-gray-400" />
         </motion.span>
@@ -63,7 +64,7 @@ function CurrencyDropdown({ selected, onSelect, align = "left" }) {
               >
                 <FlagIcon flagCode={c.flagCode} className="w-7 h-7" />
                 <div>
-                  <p className="text-white text-sm font-semibold">{c.code}</p>
+                  <p className="text-white text-sm font-semibold">{c.code.toUpperCase()}</p>
                   <p className="text-gray-400 text-xs">{c.name}</p>
                 </div>
               </button>
@@ -76,14 +77,26 @@ function CurrencyDropdown({ selected, onSelect, align = "left" }) {
 }
 
 export default function CurrencyConverter() {
+  // Use the live rates hook we created
+  const { rates, loading } = useExchangeRates();
+
   const [from, setFrom] = useState(currencies[0]);
   const [to, setTo] = useState(currencies[3]);
   const [amount, setAmount] = useState(100);
   const [rotated, setRotated] = useState(false);
-  const [showResult, setShowResult] = useState(false);
+  const [showResult, setShowResult] = useState(true); // Set to true so it calculates automatically
 
   const availableBalance = 16058.94;
-  const result = (amount / from.rate) * to.rate;
+
+  // --- THE MATH LOGIC ---
+  // 1. If rates aren't loaded yet, use the fallback mock rates from mockData
+  const fromRate = rates ? rates[from.code.toUpperCase()] : from.rate;
+  const toRate = rates ? rates[to.code.toUpperCase()] : to.rate;
+
+  // 2. Calculate the real conversion
+  const result = (amount / fromRate) * toRate;
+  
+  // 3. Animate the number (keep it live if there's a result)
   const animatedResult = useCountUp(showResult ? result : 0, 1200, 2);
 
   const handleSwap = () => {
@@ -98,6 +111,11 @@ export default function CurrencyConverter() {
     setTimeout(() => setShowResult(true), 50);
   };
 
+  // Show a loading state for the rate bar if API is fetching
+  const exchangeRateDisplay = loading 
+    ? "..." 
+    : (toRate / fromRate).toFixed(4);
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 40 }}
@@ -110,7 +128,7 @@ export default function CurrencyConverter() {
           ⚡ Instant AI Converter
         </h3>
         <span className="text-xs text-gray-400 hover:text-cyan-400 cursor-pointer transition">
-          Currencies
+          {loading ? "Fetching rates..." : "Live Rates"}
         </span>
       </div>
 
@@ -143,14 +161,14 @@ export default function CurrencyConverter() {
           <span className="text-cyan-400 font-semibold">
             {availableBalance.toLocaleString("en-US", {
               style: "currency",
-              currency: from.code,
+              currency: from.code.toUpperCase(),
             })}
           </span>
         </p>
       </div>
 
       <div className="bg-black/20 border border-white/5 rounded-xl px-4 py-2.5 text-center text-sm text-gray-300 mb-5">
-        1 {from.code} = {(to.rate / from.rate).toFixed(4)} {to.code}
+        1 {from.code.toUpperCase()} = {exchangeRateDisplay} {to.code.toUpperCase()}
       </div>
 
       <motion.button
@@ -172,7 +190,7 @@ export default function CurrencyConverter() {
           >
             <p className="text-gray-400 text-xs">Converted Amount</p>
             <p className="text-emerald-400 text-2xl font-bold font-mono">
-              {animatedResult} {to.code}
+              {animatedResult} {to.code.toUpperCase()}
             </p>
           </motion.div>
         )}
