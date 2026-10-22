@@ -25,7 +25,11 @@ export default function CurrencyCard({ currency, index }) {
           style={{ backfaceVisibility: "hidden" }}
         >
           <div className="flex justify-between items-center">
-            <span className="text-3xl">{currency.flag}</span>
+            <img
+              src={`https://flagcdn.com/w80/${currency.flagCode}.png`}
+              alt={currency.code}
+              className="w-10 h-10 rounded-full object-cover border border-white/10"
+            />
             <motion.span
               className="w-2 h-2 rounded-full bg-cyan-400"
               animate={{ opacity: [1, 0.2, 1] }}

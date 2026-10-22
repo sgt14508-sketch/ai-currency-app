@@ -1,12 +1,12 @@
 export const currencies = [
-  { code: "USD", name: "US Dollar", flag: "🇺🇸", rate: 1 },
-  { code: "EUR", name: "Euro", flag: "🇪🇺", rate: 0.92 },
-  { code: "GBP", name: "British Pound", flag: "🇬🇧", rate: 0.78 },
-  { code: "INR", name: "Indian Rupee", flag: "🇮🇳", rate: 83.12 },
-  { code: "JPY", name: "Japanese Yen", flag: "🇯🇵", rate: 149.5 },
-  { code: "AUD", name: "Australian Dollar", flag: "🇦🇺", rate: 1.52 },
-  { code: "CAD", name: "Canadian Dollar", flag: "🇨🇦", rate: 1.36 },
-  { code: "CNY", name: "Chinese Yuan", flag: "🇨🇳", rate: 7.24 },
+  { code: "USD", name: "US Dollar", flag: "🇺🇸", flagCode: "us", rate: 1 },
+  { code: "EUR", name: "Euro", flag: "🇪🇺", flagCode: "eu", rate: 0.92 },
+  { code: "GBP", name: "British Pound", flag: "🇬🇧", flagCode: "gb", rate: 0.78 },
+  { code: "INR", name: "Indian Rupee", flag: "🇮🇳", flagCode: "in", rate: 83.12 },
+  { code: "JPY", name: "Japanese Yen", flag: "🇯🇵", flagCode: "jp", rate: 149.5 },
+  { code: "AUD", name: "Australian Dollar", flag: "🇦🇺", flagCode: "au", rate: 1.52 },
+  { code: "CAD", name: "Canadian Dollar", flag: "🇨🇦", flagCode: "ca", rate: 1.36 },
+  { code: "CNY", name: "Chinese Yuan", flag: "🇨🇳", flagCode: "cn", rate: 7.24 },
 ];
 
 export const chartData = [

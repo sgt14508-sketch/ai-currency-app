@@ -17,7 +17,7 @@ export default function Navbar() {
           <FaGlobeAmericas className="text-cyan-400 text-3xl" />
         </motion.div>
         <h1 className="text-white text-xl font-bold tracking-wide">
-          Nexa<span className="text-cyan-400">FX</span>
+          Currency <span className="text-cyan-400">Exchanger Pro</span>
         </h1>
       </div>
 
