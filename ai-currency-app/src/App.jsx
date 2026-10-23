@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import LandingNavbar from "./components/landing/LandingNavbar";
-import Hero from "./components/landing/Hero";
+import LandingNavbar from "./components/LandingNavbar";
+import Hero from "./components/Hero";
 import LoginPage from "./components/LoginPage";
 import Navbar from "./components/Navbar";
 import LiveTicker from "./components/LiveTicker";
